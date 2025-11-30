@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cstdio>
 #include <vector>
+#include <map>
 
 
 
@@ -13,6 +14,13 @@
 int* getscreen();
 void scrclr();
 void scrpos(int x, int y);
+
+// UTILITIES
+namespace utils
+{
+	void inputSplit(std::string input, std::vector<std::string> &split);
+}
+
 
 // FORWARD DECLARATIONS
 class Screen;
@@ -48,14 +56,21 @@ namespace modules	// HIDES CLASSES FROM USER
 	class Console	// Console handling
 	{
 		private:
-			std::string currInput;	// Stores current input string TODO change to array std::string*?
-			Screen* scrHandle;	// Points to screen, assigned on construction
+			const std::map<std::string, char> cmd = {	// List of console commands mapped to a single char
+				{ "graph", 'g' },
+				{ "quit", 'q' }
+			};
+			std::string currInput;				// Stores current input string as a whole
+			std::vector<std::string> parseInput;		// Stores current input as splitted words
+			bool isGraph = false;				// Communicates to screen (through return of readInput()) whether a graph is to be drawn
+			Screen* scrHandle;				// Points to screen, assigned on construction
 		public:
 			Console(Screen &handle);
 			int readInput();
 			void graph(modules::Graph* graphptr);
 	};
 }
+
 
 class Screen	//	// Screen handling
 {
