@@ -27,6 +27,7 @@ void Screen::reschg(int &w, int &h)	// Resizes screen matrix to (w,h)
 	curres[1] = h;			//
 }
 
+
 void Screen::ptnpsh(const Ptn &ptn)	// Pushes screen pattern to screen matrix TODO implement rich frame patterns
 {
 
@@ -59,6 +60,7 @@ void Screen::ptnpsh(const Ptn &ptn)	// Pushes screen pattern to screen matrix TO
 	}
 }
 
+
 void Screen::scrdrw()	//	//	// Draws screen from pushed matrix
 {
 	if(!hasInit)						// clear screen only on initialization
@@ -85,6 +87,7 @@ void Screen::scrdrw()	//	//	// Draws screen from pushed matrix
 
 }
 
+
 void Screen::lnedrw(int line)	//	// Draws single line from pushed matrix (efficient for small updates)
 {
 	for(int x = 0; x < curres[0]; x++)
@@ -104,6 +107,7 @@ Screen::Screen()	//	//	// Adaptive resolution constructor, to use as default
 {
 	int* res = getscreen(); 
 	reschg(res[0], res[1]);
+	delete res;		// res is not needed anymore, frees up some memory
 
 	printf("\nres:\t%i; %i\n", res[0], res[1]);
 	printf("\ncurres:\t%i; %i\n", curres[0], curres[1]);
@@ -112,11 +116,13 @@ Screen::Screen()	//	//	// Adaptive resolution constructor, to use as default
 	ptnpsh(straight);
 }
 
+
 Screen::Screen(int &w, int &h)	//	// Static resolution constructor, use only on specific need
 {
 	reschg(w, h);
 	ptnpsh(straight);
 }
+
 
 Screen::~Screen()	//	//	// Destructor, clears screen
 {
@@ -124,10 +130,12 @@ Screen::~Screen()	//	//	// Destructor, clears screen
 	//printf("destructor called\n");
 }
 
+
 int* Screen::getres()	//	//	// Only public method to access resolution data
 {
 	return curres;
 }
+
 
 void Screen::loop()	//	//	// Handles screen behavior
 {

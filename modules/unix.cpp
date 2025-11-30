@@ -24,10 +24,12 @@ int* getscreen()//	//	// Get console size
 	return new int[2] {(int)w.ws_col, (int)w.ws_row};	// Returns int[2] array with screen dimensions
 }
 
+
 void scrclr()	//	//	// Clears (flushes) screen and places cursor at (1, 1)
 {
 	std::cout << "\033[2J\033[1;1H";
 }
+
 
 void scrpos(int x, int y)	// Moves cursor at (x, y)
 {
