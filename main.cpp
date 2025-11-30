@@ -13,7 +13,6 @@
 
 int main(int argc, char** argv)
 {
-	//signal(SIGINT, scrclr);
 	if(argc)
 		parsarg(argc, argv);
 
@@ -28,11 +27,14 @@ int main(int argc, char** argv)
 //		  //
 // TODO TODO TODO //
 //		  //
-// interrupt signal handling: signal(SIGNAL, function) REQUIRES <csignal>
-// graph generation
+// MAIN.H	| command line arguments parsing
+// UNIX.CPP	| interrupt signal handling: signal(SIGNAL, function) REQUIRES <csignal>
+// GRAPH.CPP	| graph generation
+// CONSOLE.CPP	| console argument parsing
+// CONSOLE.CPP	| trigger graphic creation from Console::graph(Graph* graphptr), return reference to graph but include NO calculations
 
 
 //		     //
 // FIXME FIXME FIXME //
 //		     //
-// free at the moment
+// UTILS | 'using namespace utils' causes linker undefined reference
