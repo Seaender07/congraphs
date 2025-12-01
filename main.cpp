@@ -30,6 +30,7 @@ int main(int argc, char** argv)
 // MAIN.H	| command line arguments parsing
 // UNIX.CPP	| interrupt signal handling: signal(SIGNAL, function) REQUIRES <csignal>
 // GRAPH.CPP	| graph generation
+// SCREEN.CPP	| add multi-type argument support for terminal function Screen::printt(...)
 // CONSOLE.CPP	| console argument parsing
 // CONSOLE.CPP	| trigger graphic creation from Console::graph(Graph* graphptr), return reference to graph but include NO calculations
 
@@ -37,4 +38,4 @@ int main(int argc, char** argv)
 //		     //
 // FIXME FIXME FIXME //
 //		     //
-// UTILS | 'using namespace utils' causes linker undefined reference
+// UTILS.CPP	| 'using namespace utils' causes linker undefined reference
