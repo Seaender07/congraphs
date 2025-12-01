@@ -26,7 +26,7 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 	parseInput = {};	//
 	isGraph = false;	//
 
-	std::cout << " > ";
+	std::cout << " $ ";
 	//std::cin.ignore();				// Cleans std::cin buffer to avoid parsing past inputs
 	std::getline(std::cin, currInput);		// Gets whole line to send for splitting
 	utils::inputSplit(currInput, parseInput);	// Splits input and pushes each word to parseInput
@@ -44,9 +44,7 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 	}
 	catch(std::out_of_range const&)				// Catches exception BY REFERENCE (by value throws a warning) when keyword is not matched
 	{
-		//scrpos(1, 1);
-		//std::cout << "key not found: " << parseInput[0] << " / " << currInput;
-		
+		scrHandle->printt({"Key not found: '", parseInput[0], "'"}, 'e');	
 		return 0;
 	}
 

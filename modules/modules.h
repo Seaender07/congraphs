@@ -8,6 +8,12 @@
 #include <vector>
 #include <map>
 
+#define TCYAN	"\033[36m"
+#define TGREEN	"\033[32m"
+#define TAMBER	"\033[33m"
+#define TRED	"\033[31m"
+#define TDEFLT	"\033[0m"
+
 
 
 // PLATFORM-SPECIFIC FUNCTIONS (unix.cpp)
@@ -95,4 +101,5 @@ class Screen	//	// Screen handling
 
 		int* getres();
 		void loop();
+		void printt(std::vector<std::string> message, char level);
 };

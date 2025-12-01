@@ -103,7 +103,7 @@ void Screen::lnedrw(int line)	//	// Draws single line from pushed matrix (effici
 // PUBLIC //
 //	  //
 
-Screen::Screen()	//	//	// Adaptive resolution constructor, to use as default
+Screen::Screen()	//	//	//	//	//	//	// Adaptive resolution constructor, to use as default
 {
 	int* res = getscreen(); 
 	reschg(res[0], res[1]);
@@ -117,27 +117,27 @@ Screen::Screen()	//	//	// Adaptive resolution constructor, to use as default
 }
 
 
-Screen::Screen(int &w, int &h)	//	// Static resolution constructor, use only on specific need
+Screen::Screen(int &w, int &h)	//	//	//	//	//	// Static resolution constructor, use only on specific need
 {
 	reschg(w, h);
 	ptnpsh(straight);
 }
 
 
-Screen::~Screen()	//	//	// Destructor, clears screen
+Screen::~Screen()	//	//	//	//	//	//	// Destructor, clears screen
 {
 	scrclr();
 	//printf("destructor called\n");
 }
 
 
-int* Screen::getres()	//	//	// Only public method to access resolution data
+int* Screen::getres()	//	//	//	//	//	//	// Only public method to access resolution data
 {
 	return curres;
 }
 
 
-void Screen::loop()	//	//	// Handles screen behavior
+void Screen::loop()	//	//	//	//	//	//	// Handles screen behavior
 {
 	int exitCode;				// Will store exit code
 
@@ -148,6 +148,40 @@ void Screen::loop()	//	//	// Handles screen behavior
 		exitCode = console.readInput();	// Lets console accept input
 		console.graph(graphHandle);	// Attach graph (if produced) to pointer handle for drawing
 	} while(exitCode != 0);			// Execute until console signals 'quit' (exitCode = 0)
+}
+
+
+void Screen::printt(std::vector<std::string> message, char level)	// Prints to terminal (accessible through a class pointer)
+{
+	lnedrw((curres[1]-4));		// Clears out terminal line
+	scrpos(1, (curres[1]-4));	// Sets position to terminal line
+
+	std::string color;		// Stores color code
+	switch(level)			// Matches color code
+	{
+		case 'i':
+			color = TCYAN;
+			break;
+		case 's':
+			color = TGREEN;
+			break;
+		case 'w':
+			color = TAMBER;
+			break;
+		case 'e':
+			color = TRED;
+			break;
+		default:
+			color = TDEFLT;
+			break;
+	}
+
+	std::cout << " > " << color;			// Iterate through message elements and print each element (HAS TO BE std::string)
+	for(int i = 0; i < (int)(message.size()); i++)	//
+	{						//
+		std::cout << message[i];		//
+	}						//
+	std::cout << TDEFLT;				//
 }
 
 
