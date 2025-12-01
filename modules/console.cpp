@@ -27,25 +27,28 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 	isGraph = false;	//
 
 	std::cout << " $ ";
-	//std::cin.ignore();				// Cleans std::cin buffer to avoid parsing past inputs
 	std::getline(std::cin, currInput);		// Gets whole line to send for splitting
 	utils::inputSplit(currInput, parseInput);	// Splits input and pushes each word to parseInput
+
 	try
 	{
-		switch(cmd.at(parseInput[0]))			// Match first keyword in parseInput (using .at() since cmd is const) TODO parameter parsing
+		char cmdIndex = cmd.at(parseInput[0]);	// Retrieves matching commands for first keyword in parseInput (using .at() since cmd is const)
+		scrHandle->printt({}, '#');		// Clears terminal only if a match is found (otherwise execution won't reach this point)
+		switch(cmdIndex)			// Parses keywords TODO parameter parsing
 		{
 			case 'g':
 				isGraph = true;
 				break;
 			case 'q':
-				return 0;			// Returns 0 if asked to quit (handled by Screen::loop())
+				scrHandle->printt({"Quitting..."}, 's');
+				return 0;					// Returns 0 if asked to quit (handled by Screen::loop())
 				break;
 		}
 	}
-	catch(std::out_of_range const&)				// Catches exception BY REFERENCE (by value throws a warning) when keyword is not matched
+	catch(std::out_of_range const&)			// Catches exception BY REFERENCE (by value throws a warning) when keyword is not matched
 	{
 		scrHandle->printt({"Key not found: '", parseInput[0], "'"}, 'e');	
-		return 0;
+		//return 0;
 	}
 
 	return (1 + isGraph);	// Returns 2 if graph is to be drawn, 1 otherwise

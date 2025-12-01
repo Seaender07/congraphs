@@ -19,9 +19,13 @@ const Ptn straight = { '*', '|', '-' };
 
 void Screen::reschg(int &w, int &h)	// Resizes screen matrix to (w,h)
 {
-	matrix.resize(w);
-	for(int i = 0; i < w; i++)
-		matrix[i].resize(h);
+	matrix.resize(w);		// Resize rows
+	_matrix.resize(w);		//
+	for(int i = 0; i < w; i++)	// Resize colums
+	{				//
+		matrix[i].resize(h);	//
+		_matrix[i].resize(h);	//
+	}				//
 
 	curres[0] = w;			// Assigns current resolution to curres[]
 	curres[1] = h;			//
@@ -82,9 +86,10 @@ void Screen::scrdrw()	//	//	// Draws screen from pushed matrix
 			scrpos(x, y);
 			std::cout << matrix[x][y];
 			if(matrix[x][y] == '\0') printf(" ");
+
+			_matrix[x][y] = matrix[x][y];	// Stores updated screen in old matrix
 		}
 	}
-
 }
 
 
@@ -94,6 +99,47 @@ void Screen::lnedrw(int line)	//	// Draws single line from pushed matrix (effici
 	{
 		scrpos(x, line);
 		std::cout << matrix[x][line];
+		if(matrix[x][line] == '\0') printf(" ");
+
+		_matrix[x][line] = matrix[x][line];	// Stores updated line in old matrix
+	}
+}
+
+
+void Screen::autodrw()		//	// Improves drawing efficiency by determining whether whole screen or single lines have to be redrawn
+{
+	if(!hasInit)
+		scrdrw();
+
+	switch(_matrix == matrix)
+	{
+		case true:
+			lnedrw(curres[1]-2);	// Always redraws console line
+			break;
+		case false:
+			std::vector<int> lneDiff;
+			for(int y = 0; y < curres[1]; y++)
+			{
+				for(int x = 0; x < curres[0]; x++)
+				{
+					if(_matrix[x][y] == matrix[x][y])
+						continue;
+					else
+					{
+						lneDiff.push_back(y);
+					}
+				}
+			}
+
+			if(lneDiff.size() > (curres[1]/2))
+				scrdrw();
+			else
+			{
+				for(int line : lneDiff)
+					lnedrw(line);
+			}
+
+			break;
 	}
 }
 
@@ -126,7 +172,9 @@ Screen::Screen(int &w, int &h)	//	//	//	//	//	// Static resolution constructor, 
 
 Screen::~Screen()	//	//	//	//	//	//	// Destructor, clears screen
 {
-	scrclr();
+	scrpos(0, (curres[1]-1));
+	printf("\n\n");
+	//scrclr();
 	//printf("destructor called\n");
 }
 
@@ -134,20 +182,6 @@ Screen::~Screen()	//	//	//	//	//	//	// Destructor, clears screen
 int* Screen::getres()	//	//	//	//	//	//	// Only public method to access resolution data
 {
 	return curres;
-}
-
-
-void Screen::loop()	//	//	//	//	//	//	// Handles screen behavior
-{
-	int exitCode;				// Will store exit code
-
-	do
-	{
-		scrdrw();			// Clear screen TODO improve efficiency, lnedrw() + exitCode to determine graph or nah??
-		scrpos(1, curres[1]-2);		// Prepares cursor for console input
-		exitCode = console.readInput();	// Lets console accept input
-		console.graph(graphHandle);	// Attach graph (if produced) to pointer handle for drawing
-	} while(exitCode != 0);			// Execute until console signals 'quit' (exitCode = 0)
 }
 
 
@@ -159,18 +193,21 @@ void Screen::printt(std::vector<std::string> message, char level)	// Prints to t
 	std::string color;		// Stores color code
 	switch(level)			// Matches color code
 	{
-		case 'i':
+		case 'i':			// INFO
 			color = TCYAN;
 			break;
-		case 's':
+		case 's':			// SUCCESS
 			color = TGREEN;
 			break;
-		case 'w':
+		case 'w':			// WARNING
 			color = TAMBER;
 			break;
-		case 'e':
+		case 'e':			// ERROR
 			color = TRED;
 			break;
+		case '#':			// CLEAR TERMINAL
+			lnedrw(curres[1]-4);
+			return;
 		default:
 			color = TDEFLT;
 			break;
@@ -182,6 +219,20 @@ void Screen::printt(std::vector<std::string> message, char level)	// Prints to t
 		std::cout << message[i];		//
 	}						//
 	std::cout << TDEFLT;				//
+}
+
+
+void Screen::loop()	//	//	//	//	//	//	// Handles screen behavior
+{
+	int exitCode;				// Will store exit code
+
+	do
+	{
+		autodrw();			// Clear screen TODO queued matrix to know which lines to update?
+		scrpos(1, curres[1]-2);		// Prepares cursor for console input
+		exitCode = console.readInput();	// Lets console accept input
+		console.graph(graphHandle);	// Attach graph (if produced) to pointer handle for drawing
+	} while(exitCode != 0);			// Execute until console signals 'quit' (exitCode = 0)
 }
 
 

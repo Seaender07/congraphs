@@ -85,10 +85,12 @@ class Screen	//	// Screen handling
 		void ptnpsh(const Ptn &ptn);
 		void scrdrw();
 		void lnedrw(int line);
+		void autodrw();
 
 		bool hasInit = false;			// Changes to true after frame pattern is first drawn
 		int curres[2] = {0, 0};			// Stores current screen resolution: {x, y} => {w, h} => {cols, rows}
 		std::vector<std::vector<char>> matrix;	// Screen matrix, virtual representation of screen
+		std::vector<std::vector<char>> _matrix;	// Old screen matrix, stores last frame to check if a refresh is needed
 
 		modules::Console console = modules::Console(*this);		// Creates a modules::Console object for in-'loop()' usage
 		modules::Graph* graphHandle;					// Creates a modules::Graph* object pointer for graph referencing
@@ -100,6 +102,6 @@ class Screen	//	// Screen handling
 		~Screen();
 
 		int* getres();
-		void loop();
 		void printt(std::vector<std::string> message, char level);
+		void loop();
 };
