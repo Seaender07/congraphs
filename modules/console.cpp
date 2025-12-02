@@ -7,6 +7,9 @@
 #include <cstdio>
 #include "modules.h"
 
+#define NOPARS	100
+#define PARCWR	101
+
 using namespace modules;	// Avoids namespace usage hassle (modules::)
 
 
@@ -32,15 +35,21 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 
 	try
 	{
-		char cmdIndex = cmd.at(parseInput[0]);	// Retrieves matching commands for first keyword in parseInput (using .at() since cmd is const)
-		scrHandle->printt({}, '#');		// Clears terminal only if a match is found (otherwise execution won't reach this point)
-		switch(cmdIndex)			// Parses keywords TODO parameter parsing
+		char cmdIndex = cmd.at(parseInput[0]);			// Retrieves matching commands for first keyword in parseInput (using .at() since cmd is const)
+		bool hasPars = (parseInput.size() > 1 ? true : false);	// Stores whether there are parameters sent with the command
+		int numPars = (int)(parseInput.size()) - 1;		// Stores parameter count EXCLUDING COMMAND
+		scrHandle->printt({}, '#');				// Clears terminal only if a match is found (otherwise execution won't reach this point)
+		switch(cmdIndex)					// Parses keywords TODO parameter parsing
 		{
 			case 'c':
 				scrHandle->printt({}, '#');
 				break;
 			case 'g':
 				isGraph = true;
+				if(!hasPars)
+					throw NOPARS;
+				else if(numPars != 1)
+					throw PARCWR;
 				break;
 			case 'v':
 				scrHandle->printt({VERSION}, 'i');
@@ -55,6 +64,18 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 	{
 		scrHandle->printt({"Key not found: '", parseInput[0], "'"}, 'e');	
 		//return 0;
+	}
+	catch(const int& e)				// Catches various exceptions
+	{
+		switch(e)
+		{
+			case NOPARS:
+				scrHandle->printt({"Parameters are needed here. Type 'help <command>' for usage rules."}, 'w');
+				break;
+			case PARCWR:
+				scrHandle->printt({"A different number of parameters is needed here. Type 'help <command>' for usage rules."}, 'w');
+				break;
+		}
 	}
 
 	return (1 + isGraph);	// Returns 2 if graph is to be drawn, 1 otherwise
