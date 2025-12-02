@@ -116,22 +116,20 @@ void Screen::autodrw()		//	// Improves drawing efficiency by determining whether
 		case true:
 			lnedrw(curres[1]-2);	// Always redraws console line
 			break;
-		case false:
+		case false:			// This code is shit
 			std::vector<int> lneDiff;
 			for(int y = 0; y < curres[1]; y++)
 			{
 				for(int x = 0; x < curres[0]; x++)
 				{
-					if(_matrix[x][y] == matrix[x][y])
-						continue;
-					else
+					if(_matrix[x][y] != matrix[x][y])
 					{
 						lneDiff.push_back(y);
 					}
 				}
 			}
 
-			if(lneDiff.size() > (curres[1]/2))
+			if((int)(lneDiff.size()) > (curres[1]/2))
 				scrdrw();
 			else
 			{
