@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <vector>
 #include <map>
+#include "../data/data.h"
 
 #define TCYAN	"\033[36m"
 #define TGREEN	"\033[32m"
@@ -63,7 +64,9 @@ namespace modules	// HIDES CLASSES FROM USER
 	{
 		private:
 			const std::map<std::string, char> cmd = {	// List of console commands mapped to a single char
+				{ "clear", 'c' },
 				{ "graph", 'g' },
+				{ "version", 'v' },
 				{ "quit", 'q' }
 			};
 			std::string currInput;				// Stores current input string as a whole

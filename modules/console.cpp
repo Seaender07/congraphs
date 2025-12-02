@@ -36,8 +36,14 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 		scrHandle->printt({}, '#');		// Clears terminal only if a match is found (otherwise execution won't reach this point)
 		switch(cmdIndex)			// Parses keywords TODO parameter parsing
 		{
+			case 'c':
+				scrHandle->printt({}, '#');
+				break;
 			case 'g':
 				isGraph = true;
+				break;
+			case 'v':
+				scrHandle->printt({VERSION}, 'i');
 				break;
 			case 'q':
 				scrHandle->printt({"Quitting..."}, 's');
