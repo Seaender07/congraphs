@@ -205,6 +205,9 @@ void Screen::printt(std::vector<std::string> message, char level)	// Prints to t
 		case 'e':			// ERROR
 			color = TRED;
 			break;
+		case 'd':			// DEFAULT
+			color = TDEFLT;
+			break;
 		case '#':			// CLEAR TERMINAL
 			lnedrw(curres[1]-4);
 			return;
