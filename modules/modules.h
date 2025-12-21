@@ -55,9 +55,11 @@ namespace modules	// HIDES CLASSES FROM USER
 	class Graph	// Graph handling TODO
 	{
 		private:
-
+			std::string strEq;
+			unsigned char log;
 		public:
-
+			Graph(std::string strequation);
+			unsigned char getlog();
 	};
 
 	class Console	// Console handling
@@ -73,10 +75,13 @@ namespace modules	// HIDES CLASSES FROM USER
 			std::vector<std::string> parseInput;		// Stores current input as splitted words
 			bool isGraph = false;				// Communicates to screen (through return of readInput()) whether a graph is to be drawn
 			Screen* scrHandle;				// Points to screen, assigned on construction
+			modules::Graph* graphHandle;			// Points to newly generated graph
+			
+			void graph(std::string strequation);
 		public:
 			Console(Screen &handle);
 			int readInput();
-			void graph(modules::Graph* graphptr);
+			void getgraph(modules::Graph* extgraphptr);
 	};
 }
 

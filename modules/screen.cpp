@@ -232,7 +232,7 @@ void Screen::loop()	//	//	//	//	//	//	// Handles screen behavior
 		autodrw();			// Clear screen TODO queued matrix to know which lines to update?
 		scrpos(1, curres[1]-2);		// Prepares cursor for console input
 		exitCode = console.readInput();	// Lets console accept input
-		console.graph(graphHandle);	// Attach graph (if produced) to pointer handle for drawing
+		console.getgraph(graphHandle);	// Attach graph (if produced) to pointer handle for drawing
 	} while(exitCode != 0);			// Execute until console signals 'quit' (exitCode = 0)
 }
 

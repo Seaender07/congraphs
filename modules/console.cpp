@@ -9,8 +9,20 @@
 
 #define NOPARS	100
 #define PARCWR	101
+#define GPHSTX	200
 
 using namespace modules;	// Avoids namespace usage hassle (modules::)
+
+
+
+//	     //
+// PROTECTED //
+//	     //
+
+void Console::graph(std::string strequation)	//	// Prompts graph generation when requested to do so
+{
+	graphHandle = new modules::Graph{strequation};
+}
 
 
 
@@ -28,10 +40,22 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 	currInput = "";		// Cleans out needed parameters (class members can access last status until now)
 	parseInput = {};	//
 	isGraph = false;	//
+	
+	unsigned char graphlog;	// Stores graph creation log
 
 	std::cout << " $ ";
 	std::getline(std::cin, currInput);		// Gets whole line to send for splitting
 	utils::inputSplit(currInput, parseInput);	// Splits input and pushes each word to parseInput
+	
+
+	/*	TODO TODO TODO return value memory saving
+	 *	char:	0	0	0	0	0	0	0	0
+	 *		^	^	^	^	^	^	^	^
+	 *		|	|	|	|	|	|	|	|
+	 *		[rfrsh]	[]	[]	[]	[draw?]	[]	[]	[]
+	 *
+	 *		{	scr ops		}	{	grph ops	}
+	 */
 
 	try
 	{
@@ -50,6 +74,9 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 					throw NOPARS;
 				else if(numPars != 1)
 					throw PARCWR;
+				graph(parseInput[1]);
+				graphlog = graphHandle->getlog();
+				(graphlog != 0xff ? throw GPHSTX : 0);
 				break;
 			case 'v':
 				scrHandle->printt({VERSION}, 'i');
@@ -75,6 +102,9 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 			case PARCWR:
 				scrHandle->printt({"A different number of parameters is needed here. Type 'help <command>' for usage rules."}, 'w');
 				break;
+			case GPHSTX:
+				scrHandle->printt({"Broken 'graph' syntax. Type 'help <command>' for usage rules."}, 'e');
+				break;
 		}
 	}
 
@@ -82,7 +112,7 @@ int Console::readInput()	//	//	//	// Reads and parses console input
 }
 
 
-void Console::graph(Graph* graphptr)	//	//	// Makes graph (if generated) available to Screen
+void Console::getgraph(modules::Graph* extgraphptr)	//	//	// Makes graph (if generated) available to Screen
 {
 	// TODO graph creation should be triggered from here, but no inherent calculations should appear (leave that to modules::Graph)
 }
